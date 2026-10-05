@@ -28,7 +28,8 @@
         "mezzio/mezzio": "^3.18",
         "mezzio/mezzio-fastroute": "^3.11",
         "php-db/phpdb-qa-tools": "0.1.x-dev",
-        "phpunit/phpunit": "^11.5.42"
+        "phpunit/phpunit": "^11.5.42",
+        "symfony/string": "^6.4.10 || ^7.1.3"
     },
     "suggest": {
         "laminas/laminas-cli": "To run the storage:variants command as vendor/bin/laminas storage:variants.",
