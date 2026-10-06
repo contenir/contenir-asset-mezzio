@@ -4,7 +4,7 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
-## [2.0.0] - Unreleased
+## [2.0.0] - 2026-10-05
 
 First release. This package brings `contenir/contenir-asset-laminas-mvc` 2.2
 to Mezzio. See "Coming from contenir-asset-laminas-mvc" in the README.

@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 use UnexpectedValueException;
 
 /**
- * Builds the contenir/storage ImageResizer. With no `binary` configured on the
+ * Builds the contenir/contenir-storage ImageResizer. With no `binary` configured on the
  * primary backend it auto-discovers magick/convert from PATH.
  */
 final class ImageResizerFactory
