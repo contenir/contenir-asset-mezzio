@@ -13,7 +13,7 @@ use UnexpectedValueException;
 
 /**
  * Wires the resolver to the site-registered {@see StorageManager}. R2 sites must
- * register that service (e.g. via contenir/storage's StorageConfig); the
+ * register that service (e.g. via contenir/contenir-storage's StorageConfig); the
  * resolver is only constructed when the generation route is hit, so local sites
  * that never expose the route incur no dependency.
  */
