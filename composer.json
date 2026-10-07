@@ -21,13 +21,13 @@
         "symfony/console": "^6.4.10 || ^7.1.3"
     },
     "require-dev": {
+        "contenir/contenir-qa-tools": "0.1.x-dev",
         "infection/infection": "^0.34.1",
         "laminas/laminas-diactoros": "^3.3",
         "laminas/laminas-servicemanager": "^3.22",
         "laminas/laminas-view": "^2.33",
         "mezzio/mezzio": "^3.18",
         "mezzio/mezzio-fastroute": "^3.11",
-        "php-db/phpdb-qa-tools": "0.1.x-dev",
         "phpunit/phpunit": "^11.5.42",
         "symfony/string": "^6.4.10 || ^7.1.3"
     },
