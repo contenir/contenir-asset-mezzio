@@ -96,6 +96,16 @@ final class FakeOnDemandStorage implements
         return $this->outstanding[$path] ?? [];
     }
 
+    /**
+     * @return resource
+     *
+     * @mago-expect analysis:missing-return-type PHP has no resource type; the interface's docblock names it.
+     */
+    public function read(string $path)
+    {
+        throw new LogicException('not exercised');
+    }
+
     public function regenerateMissingVariants(string $path): array
     {
         $keys = $this->missingVariants($path);

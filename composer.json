@@ -11,7 +11,7 @@
         "srcset"
     ],
     "require": {
-        "contenir/contenir-asset": "^2.0@RC",
+        "contenir/contenir-asset": "^2.0.0-RC2@RC",
         "contenir/contenir-storage": "^2.2",
         "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
         "psr/container": "^1.1 || ^2.0",
