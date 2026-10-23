@@ -7,6 +7,7 @@ namespace Contenir\Asset\Mezzio\Tests\Integration\Handler;
 use Contenir\Asset\Mezzio\Handler\AssetVariantHandler;
 use Contenir\Asset\Mezzio\Service\ProfileProviderService;
 use Contenir\Asset\Mezzio\Service\VariantGenerator;
+use Contenir\Asset\Mezzio\Tests\TestAsset\Image\GifFactory;
 use Contenir\Asset\Mezzio\Tests\Trait\TemporaryDirectoryTrait;
 use Contenir\Storage\Image\ImageResizerInterface;
 use Contenir\Storage\Image\StubImageResizer;
@@ -170,6 +171,25 @@ final class AssetVariantHandlerTest extends TestCase
         $response = $this->handle("/asset/foo/_variant/thumb/pic.{$extension}");
 
         static::assertSame($mediaType, $response->getHeaderLine('Content-Type'));
+    }
+
+    /**
+     * A variant URL from before the source was known to be animated still
+     * shows the animation: the original, under its own type.
+     */
+    #[Test]
+    public function servesAnAnimatedSourceItselfForAVariantRequest(): void
+    {
+        $this->writeFile('asset/foo/spin.gif', GifFactory::bytes(2));
+        $resizer = new StubImageResizer();
+
+        $response = $this->handle('/asset/foo/_variant/thumb/spin.webp', $resizer);
+
+        static::assertSame(
+            [200, 'image/gif', GifFactory::bytes(2)],
+            [$response->getStatusCode(), $response->getHeaderLine('Content-Type'), (string) $response->getBody()],
+        );
+        static::assertSame([], $resizer->calls);
     }
 
     #[Test]

@@ -16,6 +16,14 @@ All of them return raw strings, so escape them for the output context.
 | `View\StorageSources` (`storageSources`) | `(?string $path, string $profile, bool $lazy = false)` | One `<source type="image/…">` per profile format, with `sizes`. `$lazy` writes `data-lazysrc-srcset` instead of `srcset` |
 | `View\StorageUrl` (`storageUrl`) | `(?string $path, ?string $variant = null, ?string $format = null)` | The original URL, or the URL of one variant (optionally in another format) |
 
+An animated source (a GIF, APNG or WebP with more than one frame) gets `''`
+from `storageSrcSet()` and `storageSources()`: resizing would keep one
+frame, so the browser falls back to the `<img>`'s `src`, the original, at
+every size. `Service\AnimatedSourceCheck` decides by reading the file's
+header under the local backend's `root_path`, once per path per request,
+and only for those three extensions. Sources on an object store are not
+inspected yet and keep their variants.
+
 A null or empty `$path` renders `''`. An unknown profile (srcset/sources) or
 variant (url) logs a warning to the container's `Psr\Log\LoggerInterface`, if
 one is registered. `storageUrl()` still returns the URL it would have built.

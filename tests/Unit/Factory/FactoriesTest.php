@@ -10,7 +10,9 @@ use Contenir\Asset\Mezzio\Handler\AssetVariantGenerateHandler;
 use Contenir\Asset\Mezzio\Handler\AssetVariantHandler;
 use Contenir\Asset\Mezzio\Handler\Factory\AssetVariantGenerateHandlerFactory;
 use Contenir\Asset\Mezzio\Handler\Factory\AssetVariantHandlerFactory;
+use Contenir\Asset\Mezzio\Service\AnimatedSourceCheck;
 use Contenir\Asset\Mezzio\Service\AssetUrlBuilder;
+use Contenir\Asset\Mezzio\Service\Factory\AnimatedSourceCheckFactory;
 use Contenir\Asset\Mezzio\Service\Factory\AssetUrlBuilderFactory;
 use Contenir\Asset\Mezzio\Service\Factory\ImageResizerFactory;
 use Contenir\Asset\Mezzio\Service\Factory\OnDemandVariantResolverFactory;
@@ -155,6 +157,7 @@ final class FactoriesTest extends TestCase
     {
         $container = $this->services();
 
+        static::assertInstanceOf(AnimatedSourceCheck::class, (new AnimatedSourceCheckFactory())($container));
         static::assertInstanceOf(VariantsCommand::class, (new VariantsCommandFactory())($container));
         static::assertInstanceOf(AssetVariantHandler::class, (new AssetVariantHandlerFactory())($container));
         static::assertInstanceOf(
@@ -208,6 +211,7 @@ final class FactoriesTest extends TestCase
             'config'                        => ['storage' => ['backend' => ['local' => ['generate_secret' => 's']]]],
             ProfileProviderService::class   => $profiles,
             AssetUrlBuilder::class          => new AssetUrlBuilder(''),
+            AnimatedSourceCheck::class      => new AnimatedSourceCheck(new AssetUrlBuilder(''), '/var/www'),
             StorageManager::class           => $manager,
             OnDemandVariantResolver::class  => new OnDemandVariantResolver($manager),
             VariantGenerator::class         => new VariantGenerator(new StubImageResizer(), $profiles, '/var/www'),

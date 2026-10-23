@@ -6,6 +6,7 @@ namespace Contenir\Asset\Mezzio\Tests\Integration\Service;
 
 use Contenir\Asset\Mezzio\Service\ProfileProviderService;
 use Contenir\Asset\Mezzio\Service\VariantGenerator;
+use Contenir\Asset\Mezzio\Tests\TestAsset\Image\GifFactory;
 use Contenir\Asset\Mezzio\Tests\Trait\TemporaryDirectoryTrait;
 use Contenir\Storage\Exception\WriteException;
 use Contenir\Storage\Image\ImageResizer;
@@ -58,6 +59,18 @@ final class VariantGeneratorTest extends TestCase
             'backslash parent segment'      => ['foo\\..\\..\\outside'],
             'double-encoded parent segment' => ['%2e%2e/outside'],
         ];
+    }
+
+    #[Test]
+    public function answersWithAnAnimatedSourceItselfAndResizesNothing(): void
+    {
+        $this->writeFile('asset/foo/spin.gif', GifFactory::bytes(3));
+        $resizer = new StubImageResizer();
+
+        $path = $this->generator($resizer)->generate('foo', 't-80', 'spin.webp');
+
+        static::assertSame($this->path('asset/foo/spin.gif'), $path);
+        static::assertSame([], $resizer->calls);
     }
 
     #[Test]

@@ -31,6 +31,13 @@ emitter sends the response.
    delegate), it writes the source format instead, and it reuses either file
    if it already exists.
 
+### Animated sources
+
+An animated source is never resized. A request for one of its variants, such
+as a URL in a page cached before the helpers stopped offering them, is
+answered with the original file under its own `Content-Type`, so the
+animation still plays.
+
 ### Path traversal guard
 
 `Security\PathGuard` checks the decoded values before any filesystem access:

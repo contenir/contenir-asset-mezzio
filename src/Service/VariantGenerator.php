@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Contenir\Asset\Mezzio\Service;
 
 use Contenir\Asset\Mezzio\Security\PathGuard;
+use Contenir\Storage\Image\AnimationDetector;
 use Contenir\Storage\Image\ImageResizerInterface;
 use Contenir\Storage\Variant;
 use Throwable;
@@ -50,7 +51,8 @@ final class VariantGenerator
      * The path of the variant file for `<folder>/_variant/<name>/<filename>`,
      * generating it when missing, or null when the folder or filename is
      * unsafe, the variant is unknown, no source exists, or no format can be
-     * produced.
+     * produced. An animated source is never resized: its own path is the
+     * answer.
      *
      * $folder, $name and $filename are the decoded request values. They pass
      * {@see PathGuard} before anything touches the filesystem: a `..` segment,
@@ -77,6 +79,14 @@ final class VariantGenerator
         $source = $this->resolveSource($folder, $filename);
         if (null === $source) {
             return null;
+        }
+
+        /**
+         * An animation is served as itself: resizing would keep one frame. The
+         * helpers offer no variants of it, so this answers URLs from before.
+         */
+        if (AnimationDetector::isAnimatedFile($source)) {
+            return $source;
         }
 
         $variantDir   = sprintf('%s/asset/%s/%s/%s', $this->assetRoot, $folder, self::VARIANT_DIR, $name);

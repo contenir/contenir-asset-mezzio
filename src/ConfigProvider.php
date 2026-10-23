@@ -52,6 +52,7 @@ final readonly class ConfigProvider
                 Handler\AssetVariantHandler::class         => Handler\Factory\AssetVariantHandlerFactory::class,
                 Handler\ImageResizeHandler::class          => Handler\Factory\ImageResizeHandlerFactory::class,
                 ImageResizer::class                        => Service\Factory\ImageResizerFactory::class,
+                Service\AnimatedSourceCheck::class         => Service\Factory\AnimatedSourceCheckFactory::class,
                 Service\AssetUrlBuilder::class             => Service\Factory\AssetUrlBuilderFactory::class,
                 Service\OnDemandVariantResolver::class     => Service\Factory\OnDemandVariantResolverFactory::class,
                 Service\ProfileProviderService::class      => Service\Factory\ProfileProviderServiceFactory::class,

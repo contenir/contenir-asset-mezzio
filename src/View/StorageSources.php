@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Contenir\Asset\Mezzio\View;
 
+use Contenir\Asset\Mezzio\Service\AnimatedSourceCheck;
 use Contenir\Asset\Mezzio\Service\AssetUrlBuilder;
 use Contenir\Asset\Mezzio\Service\ProfileProviderService;
 use Psr\Log\LoggerInterface;
@@ -28,7 +29,8 @@ use function sprintf;
  * defeat lazy loading.
  *
  * Returns raw markup — asset paths are percent-encoded and the sizes value is
- * config. An unknown profile renders '' and logs a warning.
+ * config. An unknown profile renders '' and logs a warning. An animated source
+ * renders '' too: resizing would keep one frame, so it is served as itself.
  *
  * A plain invokable service: call it from any template engine.
  *
@@ -40,6 +42,7 @@ final readonly class StorageSources
         private ProfileProviderService $profiles,
         private AssetUrlBuilder $urls,
         private LoggerInterface $logger = new NullLogger(),
+        private ?AnimatedSourceCheck $animation = null,
     ) {}
 
     /**
@@ -57,7 +60,7 @@ final readonly class StorageSources
 
             return '';
         }
-        if ([] === $definition->variants) {
+        if ([] === $definition->variants || true === $this->animation?->isAnimated($path)) {
             return '';
         }
 
