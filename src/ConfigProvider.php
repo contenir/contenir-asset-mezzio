@@ -10,7 +10,8 @@ use Contenir\Storage\Image\ImageResizerInterface;
 /**
  * Container wiring for the keyed asset bridge: the services, the two PSR-15
  * handlers, the template services, their laminas-view helper names and the
- * `storage:variants` laminas-cli command.
+ * `storage:variants` laminas-cli command; and the handler that serves
+ * contenir-asset's legacy `.WxH` scheme through its `LegacyResizer`.
  *
  * Variant behaviour (widths, crop, quality, sizes, formats) is NOT defined
  * here: it lives in the shared `storage.variants` config that both this
@@ -49,6 +50,7 @@ final readonly class ConfigProvider
                 Command\VariantsCommand::class             => Command\VariantsCommandFactory::class,
                 Handler\AssetVariantGenerateHandler::class => Handler\Factory\AssetVariantGenerateHandlerFactory::class,
                 Handler\AssetVariantHandler::class         => Handler\Factory\AssetVariantHandlerFactory::class,
+                Handler\ImageResizeHandler::class          => Handler\Factory\ImageResizeHandlerFactory::class,
                 ImageResizer::class                        => Service\Factory\ImageResizerFactory::class,
                 Service\AnimatedSourceCheck::class         => Service\Factory\AnimatedSourceCheckFactory::class,
                 Service\AssetUrlBuilder::class             => Service\Factory\AssetUrlBuilderFactory::class,

@@ -11,6 +11,8 @@ use Contenir\Asset\Mezzio\Handler\AssetVariantGenerateHandler;
 use Contenir\Asset\Mezzio\Handler\AssetVariantHandler;
 use Contenir\Asset\Mezzio\Handler\Factory\AssetVariantGenerateHandlerFactory;
 use Contenir\Asset\Mezzio\Handler\Factory\AssetVariantHandlerFactory;
+use Contenir\Asset\Mezzio\Handler\Factory\ImageResizeHandlerFactory;
+use Contenir\Asset\Mezzio\Handler\ImageResizeHandler;
 use Contenir\Asset\Mezzio\Service\AnimatedSourceCheck;
 use Contenir\Asset\Mezzio\Service\AssetUrlBuilder;
 use Contenir\Asset\Mezzio\Service\Factory\AnimatedSourceCheckFactory;
@@ -64,6 +66,7 @@ final class ConfigProviderTest extends TestCase
                     VariantsCommand::class             => VariantsCommandFactory::class,
                     AssetVariantGenerateHandler::class => AssetVariantGenerateHandlerFactory::class,
                     AssetVariantHandler::class         => AssetVariantHandlerFactory::class,
+                    ImageResizeHandler::class          => ImageResizeHandlerFactory::class,
                     ImageResizer::class                => ImageResizerFactory::class,
                     AnimatedSourceCheck::class         => AnimatedSourceCheckFactory::class,
                     AssetUrlBuilder::class             => AssetUrlBuilderFactory::class,

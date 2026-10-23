@@ -4,10 +4,15 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [2.1.0] - Unreleased
 
 ### Added
 
+- `ImageResizeHandler`, serving contenir-asset's deprecated `.WxH` scheme
+  (`/asset/<folder>/.480x/<file>`, as its `assetSrcSet()` emits) through
+  its `LegacyResizer`, so a Mezzio site gets the same legacy resize route
+  the laminas-mvc adapter has. Route it in `config/routes.php` like the
+  variant handler.
 - `Service\AnimatedSourceCheck` tells whether a stored image is animated, by
   reading the file's header under the local backend's `root_path` with
   contenir-storage's `AnimationDetector`. Only `.gif`, `.png` and `.webp`
@@ -16,6 +21,8 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Requires `contenir/contenir-asset` ^2.0@RC (RC2 or later), which no
+  longer depends on laminas-mvc.
 - `storageSrcSet()` and `storageSources()` render `''` for an animated
   source, so the `<img>`'s `src`, the original, is shown at every size
   rather than a resized still of one frame. Both take an optional
