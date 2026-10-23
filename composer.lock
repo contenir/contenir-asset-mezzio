@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c680110f89491252ce56fcd451a37af5",
+    "content-hash": "57650602db19fbcf135f55dba99d2085",
     "packages": [
         {
             "name": "contenir/contenir-asset",
@@ -133,16 +133,16 @@
         },
         {
             "name": "contenir/contenir-storage",
-            "version": "v2.2.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/contenir/contenir-storage.git",
-                "reference": "09c75c3184a6688bb5ca8f1f246fc057894fadfc"
+                "reference": "322484f21df3b5894fd3cf38f508eaf41822828e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/contenir/contenir-storage/zipball/09c75c3184a6688bb5ca8f1f246fc057894fadfc",
-                "reference": "09c75c3184a6688bb5ca8f1f246fc057894fadfc",
+                "url": "https://api.github.com/repos/contenir/contenir-storage/zipball/322484f21df3b5894fd3cf38f508eaf41822828e",
+                "reference": "322484f21df3b5894fd3cf38f508eaf41822828e",
                 "shasum": ""
             },
             "require": {
@@ -154,11 +154,11 @@
                 "contenir/storage": "self.version"
             },
             "require-dev": {
+                "contenir/contenir-qa-tools": "0.1.x-dev",
                 "infection/infection": "^0.34.1",
                 "league/flysystem-aws-s3-v3": "^3.29",
                 "league/flysystem-memory": "^3.29",
                 "league/mime-type-detection": "^1.16",
-                "php-db/phpdb-qa-tools": "0.1.x-dev",
                 "phpunit/phpunit": "^11.5.42"
             },
             "suggest": {
@@ -183,9 +183,9 @@
             "description": "Framework-agnostic asset storage for Contenir CMS — local, S3-compatible, and Cloudflare Images adapters with a shared variant pipeline.",
             "support": {
                 "issues": "https://github.com/contenir/contenir-storage/issues",
-                "source": "https://github.com/contenir/contenir-storage/tree/v2.2.0"
+                "source": "https://github.com/contenir/contenir-storage/tree/v2.4.0"
             },
-            "time": "2026-10-05T13:35:15+00:00"
+            "time": "2026-10-23T03:05:06+00:00"
         },
         {
             "name": "laminas/laminas-escaper",
