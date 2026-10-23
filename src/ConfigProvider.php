@@ -50,6 +50,7 @@ final readonly class ConfigProvider
                 Handler\AssetVariantGenerateHandler::class => Handler\Factory\AssetVariantGenerateHandlerFactory::class,
                 Handler\AssetVariantHandler::class         => Handler\Factory\AssetVariantHandlerFactory::class,
                 ImageResizer::class                        => Service\Factory\ImageResizerFactory::class,
+                Service\AnimatedSourceCheck::class         => Service\Factory\AnimatedSourceCheckFactory::class,
                 Service\AssetUrlBuilder::class             => Service\Factory\AssetUrlBuilderFactory::class,
                 Service\OnDemandVariantResolver::class     => Service\Factory\OnDemandVariantResolverFactory::class,
                 Service\ProfileProviderService::class      => Service\Factory\ProfileProviderServiceFactory::class,

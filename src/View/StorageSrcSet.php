@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Contenir\Asset\Mezzio\View;
 
+use Contenir\Asset\Mezzio\Service\AnimatedSourceCheck;
 use Contenir\Asset\Mezzio\Service\AssetUrlBuilder;
 use Contenir\Asset\Mezzio\Service\ProfileProviderService;
 use Psr\Log\LoggerInterface;
@@ -16,7 +17,9 @@ use Psr\Log\NullLogger;
  *   data-lazysrc-srcset="<?= $this->storageSrcSet($asset->path, 'tile') ?>"
  *
  * Returns the raw value — escaping is the output context's job. An unknown
- * profile renders '' and logs a warning.
+ * profile renders '' and logs a warning. So does, silently, an animated
+ * source: resizing would keep one frame, so the browser uses the `<img>`'s
+ * `src`, the original.
  *
  * A plain invokable service: call it from any template engine.
  *
@@ -28,6 +31,7 @@ final readonly class StorageSrcSet
         private ProfileProviderService $profiles,
         private AssetUrlBuilder $urls,
         private LoggerInterface $logger = new NullLogger(),
+        private ?AnimatedSourceCheck $animation = null,
     ) {}
 
     public function __invoke(?string $path, string $profile): string
@@ -40,6 +44,9 @@ final readonly class StorageSrcSet
         if (null === $definition) {
             $this->logger->warning('StorageSrcSet: unknown image profile "{profile}".', ['profile' => $profile]);
 
+            return '';
+        }
+        if (true === $this->animation?->isAnimated($path)) {
             return '';
         }
 

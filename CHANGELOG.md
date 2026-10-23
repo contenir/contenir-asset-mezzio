@@ -4,6 +4,27 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `Service\AnimatedSourceCheck` tells whether a stored image is animated, by
+  reading the file's header under the local backend's `root_path` with
+  contenir-storage's `AnimationDetector`. Only `.gif`, `.png` and `.webp`
+  files are read, and each answer is kept for the request. Sources on an
+  object store are reported as still for now.
+
+### Changed
+
+- `storageSrcSet()` and `storageSources()` render `''` for an animated
+  source, so the `<img>`'s `src`, the original, is shown at every size
+  rather than a resized still of one frame. Both take an optional
+  `AnimatedSourceCheck` as a last constructor argument, which their
+  factories supply.
+- `VariantGenerator`, and so `AssetVariantHandler`, answers a variant request
+  for an animated source with the original file instead of resizing it.
+- Requires `contenir/contenir-storage` 2.4, for `AnimationDetector`.
+
 ## [2.0.0] - 2026-10-05
 
 First release. This package brings `contenir/contenir-asset-laminas-mvc` 2.2
