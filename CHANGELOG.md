@@ -4,6 +4,21 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.1.0] - Unreleased
+
+### Added
+
+- `ImageResizeHandler`, serving contenir-asset's deprecated `.WxH` scheme
+  (`/asset/<folder>/.480x/<file>`, as its `assetSrcSet()` emits) through
+  its `LegacyResizer`, so a Mezzio site gets the same legacy resize route
+  the laminas-mvc adapter has. Route it in `config/routes.php` like the
+  variant handler.
+
+### Changed
+
+- Requires `contenir/contenir-asset` ^2.0@RC (RC2 or later), which no
+  longer depends on laminas-mvc.
+
 ## [2.0.0] - 2026-10-05
 
 First release. This package brings `contenir/contenir-asset-laminas-mvc` 2.2

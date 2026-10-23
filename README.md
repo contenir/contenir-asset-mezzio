@@ -26,6 +26,7 @@ CMS and `contenir/contenir-storage` read, so there is one source of truth.
 
 - PHP 8.3, 8.4 or 8.5
 - `contenir/contenir-storage` 2.2+
+- `contenir/contenir-asset` 2.0 (RC2 or later) for the legacy resize handler
 - A PSR-7/PSR-17 implementation, with its factories registered in the container as
   `Psr\Http\Message\ResponseFactoryInterface` and `Psr\Http\Message\StreamFactoryInterface`
   (`laminas/laminas-diactoros`'s ConfigProvider does this)
@@ -104,6 +105,18 @@ path itself (`/asset/<folder>/_variant/<name>/<filename>`). It ignores route
 attributes, so any router and pattern that sends those paths to it works, and
 any other path gets a 404.
 
+A site still emitting contenir-asset's deprecated `.WxH` scheme through its
+`assetSrcSet()` routes `ImageResizeHandler` the same way; it reads
+`/asset/<folder>/.<WxH>/<filename>` from the path and resizes through the
+core's `LegacyResizer` (configure `asset.srcset.helper` with the ImageMagick
+binary, or it answers 501):
+
+```php
+use Contenir\Asset\Mezzio\Handler\ImageResizeHandler;
+
+$app->get('/asset/{folder:.+}/.{dimensions}/{filename}', ImageResizeHandler::class, 'asset.resize');
+```
+
 ## Template services
 
 | Service (laminas-view helper) | Returns |
@@ -169,6 +182,7 @@ default alias to `ImageResizer`. See
 | `Module` + `ConfigProvider` (`router`, `controllers`, `service_manager`, `view_helpers`, `laminas-cli`) | `ConfigProvider` only: `dependencies`, `view_helpers`, `laminas-cli` |
 | `assetvariant` Regex route → `Controller\AssetVariantController::indexAction()` | `Handler\AssetVariantHandler`, routed by the app (`$app->get('/asset/{path:.+}', …)`) |
 | `assetvariant-generate` Literal route → `Controller\AssetVariantGenerateController::generateAction()` | `Handler\AssetVariantGenerateHandler`, routed by the app |
+| `imageresize` Regex route → `Controller\ImageResizeController::resizeAction()` (2.3) | `Handler\ImageResizeHandler` (2.1), routed by the app |
 | `Controller\Factory\*` | `Handler\Factory\*` (also needs the PSR-17 response and stream factories) |
 | `View\Helper\StorageUrl`, `StorageSrcSet`, `StorageSources`, `StorageSizes` (extend `AbstractHelper`) | `View\StorageUrl`, `StorageSrcSet`, `StorageSources`, `StorageSizes`: plain invokables, same arguments and output, registered under the same helper names |
 | Unknown profile or variant: `E_USER_WARNING` | A PSR-3 warning to the container's `Psr\Log\LoggerInterface`, if there is one. Mezzio's error handler would turn the warning into a 500 |
