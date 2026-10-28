@@ -14,8 +14,10 @@ use Contenir\Asset\Mezzio\Handler\Factory\AssetVariantHandlerFactory;
 use Contenir\Asset\Mezzio\Handler\Factory\ImageResizeHandlerFactory;
 use Contenir\Asset\Mezzio\Handler\ImageResizeHandler;
 use Contenir\Asset\Mezzio\Service\AnimatedSourceCheck;
+use Contenir\Asset\Mezzio\Service\AssetRedirects;
 use Contenir\Asset\Mezzio\Service\AssetUrlBuilder;
 use Contenir\Asset\Mezzio\Service\Factory\AnimatedSourceCheckFactory;
+use Contenir\Asset\Mezzio\Service\Factory\AssetRedirectsFactory;
 use Contenir\Asset\Mezzio\Service\Factory\AssetUrlBuilderFactory;
 use Contenir\Asset\Mezzio\Service\Factory\ImageResizerFactory;
 use Contenir\Asset\Mezzio\Service\Factory\OnDemandVariantResolverFactory;
@@ -69,6 +71,7 @@ final class ConfigProviderTest extends TestCase
                     ImageResizeHandler::class          => ImageResizeHandlerFactory::class,
                     ImageResizer::class                => ImageResizerFactory::class,
                     AnimatedSourceCheck::class         => AnimatedSourceCheckFactory::class,
+                    AssetRedirects::class              => AssetRedirectsFactory::class,
                     AssetUrlBuilder::class             => AssetUrlBuilderFactory::class,
                     OnDemandVariantResolver::class     => OnDemandVariantResolverFactory::class,
                     ProfileProviderService::class      => ProfileProviderServiceFactory::class,

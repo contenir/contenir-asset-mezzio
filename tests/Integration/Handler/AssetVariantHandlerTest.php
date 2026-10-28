@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Contenir\Asset\Mezzio\Tests\Integration\Handler;
 
 use Contenir\Asset\Mezzio\Handler\AssetVariantHandler;
+use Contenir\Asset\Mezzio\Service\AssetRedirects;
 use Contenir\Asset\Mezzio\Service\ProfileProviderService;
 use Contenir\Asset\Mezzio\Service\VariantGenerator;
 use Contenir\Asset\Mezzio\Tests\TestAsset\Image\GifFactory;
@@ -24,6 +25,7 @@ use Psr\Http\Message\StreamInterface;
 
 use function file_exists;
 use function glob;
+use function json_encode;
 
 use const GLOB_BRACE;
 
@@ -89,6 +91,22 @@ final class AssetVariantHandlerTest extends TestCase
             'encoded parent filename'      => ['/asset/foo/_variant/thumb/%2e%2e'],
             'encoded null byte filename'   => ['/asset/foo/_variant/thumb/pic.png%00.jpg'],
         ];
+    }
+
+    #[Test]
+    public function answersNotFoundForAFileThatNeverMoved(): void
+    {
+        static::assertSame([404, 404, 404], [
+            $this->handle('/asset/library/other.png', redirects: [
+                'library/pic.jpg' => 'library/hans/pic.jpg',
+            ])->getStatusCode(),
+            $this->handle('/asset/library/_variant/thumb/other.webp', redirects: [
+                'library/pic.jpg' => 'library/hans/pic.jpg',
+            ])->getStatusCode(),
+            $this->handle('/elsewhere/library/pic.jpg', redirects: [
+                'library/pic.jpg' => 'library/hans/pic.jpg',
+            ])->getStatusCode(),
+        ]);
     }
 
     #[Test]
@@ -173,6 +191,34 @@ final class AssetVariantHandlerTest extends TestCase
         static::assertSame($mediaType, $response->getHeaderLine('Content-Type'));
     }
 
+    #[Test]
+    public function redirectsAMovedFileToWhereItNowIs(): void
+    {
+        $response = $this->handle('/asset/library/a%20b.png', redirects: ['library/a b.png' => 'library/hans/a-b.png']);
+
+        static::assertSame(
+            [301, '/asset/library/hans/a-b.png', 'public, max-age=31536000'],
+            [
+                $response->getStatusCode(),
+                $response->getHeaderLine('Location'),
+                $response->getHeaderLine('Cache-Control'),
+            ],
+        );
+    }
+
+    #[Test]
+    public function redirectsAVariantOfAMovedFileToTheSameVariantOfIt(): void
+    {
+        $response = $this->handle('/asset/library/_variant/thumb/pic.webp', redirects: [
+            'library/pic.jpg' => 'library/hans/pic-2.jpg',
+        ]);
+
+        static::assertSame([301, '/asset/library/hans/_variant/thumb/pic-2.webp'], [
+            $response->getStatusCode(),
+            $response->getHeaderLine('Location'),
+        ]);
+    }
+
     /**
      * A variant URL from before the source was known to be animated still
      * shows the animation: the original, under its own type.
@@ -223,16 +269,27 @@ final class AssetVariantHandlerTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * @param array<string, string>|null $redirects Moved files, written where the handler reads them, or none.
+     */
     private function handle(
         string $path,
         ?ImageResizerInterface $resizer = null,
         ?StreamFactoryInterface $streams = null,
+        ?array $redirects = null,
     ): ResponseInterface {
+        $moved = null;
+        if (null !== $redirects) {
+            $this->writeFile('redirects.json', (string) json_encode($redirects));
+            $moved = new AssetRedirects("{$this->path()}/redirects.json");
+        }
+
         $profiles = new ProfileProviderService(['thumb' => ['width' => 20, 'height' => 20]]);
         $handler  = new AssetVariantHandler(
             new VariantGenerator($resizer ?? new StubImageResizer(), $profiles, $this->path()),
             new ResponseFactory(),
             $streams ?? new StreamFactory(),
+            $moved,
         );
 
         return $handler->handle(new ServerRequest(

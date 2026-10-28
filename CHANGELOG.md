@@ -4,6 +4,14 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `Service\AssetRedirects`: where the files the CMS moved or renamed have gone, read from the JSON the CMS keeps
+  (`storage.redirects`, else `data/assets/redirects.json`). `AssetVariantHandler` answers an old address with a
+  301 to the new one, and a variant of a moved file with a 301 to the same variant of it, instead of a 404.
+
 ## [2.1.0] - 2026-10-23
 
 ### Added

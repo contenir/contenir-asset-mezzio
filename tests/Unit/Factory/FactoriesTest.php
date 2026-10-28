@@ -11,6 +11,7 @@ use Contenir\Asset\Mezzio\Handler\AssetVariantHandler;
 use Contenir\Asset\Mezzio\Handler\Factory\AssetVariantGenerateHandlerFactory;
 use Contenir\Asset\Mezzio\Handler\Factory\AssetVariantHandlerFactory;
 use Contenir\Asset\Mezzio\Service\AnimatedSourceCheck;
+use Contenir\Asset\Mezzio\Service\AssetRedirects;
 use Contenir\Asset\Mezzio\Service\AssetUrlBuilder;
 use Contenir\Asset\Mezzio\Service\Factory\AnimatedSourceCheckFactory;
 use Contenir\Asset\Mezzio\Service\Factory\AssetUrlBuilderFactory;
@@ -212,6 +213,7 @@ final class FactoriesTest extends TestCase
             ProfileProviderService::class   => $profiles,
             AssetUrlBuilder::class          => new AssetUrlBuilder(''),
             AnimatedSourceCheck::class      => new AnimatedSourceCheck(new AssetUrlBuilder(''), '/var/www'),
+            AssetRedirects::class           => new AssetRedirects('/no/redirects.json'),
             StorageManager::class           => $manager,
             OnDemandVariantResolver::class  => new OnDemandVariantResolver($manager),
             VariantGenerator::class         => new VariantGenerator(new StubImageResizer(), $profiles, '/var/www'),

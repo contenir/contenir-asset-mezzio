@@ -6,6 +6,7 @@ namespace Contenir\Asset\Mezzio\Handler\Factory;
 
 use Contenir\Asset\Mezzio\Container\Services;
 use Contenir\Asset\Mezzio\Handler\AssetVariantHandler;
+use Contenir\Asset\Mezzio\Service\AssetRedirects;
 use Contenir\Asset\Mezzio\Service\VariantGenerator;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -28,6 +29,7 @@ final class AssetVariantHandlerFactory
             Services::get($container, VariantGenerator::class),
             Services::get($container, ResponseFactoryInterface::class),
             Services::get($container, StreamFactoryInterface::class),
+            Services::get($container, AssetRedirects::class),
         );
     }
 }
