@@ -17,12 +17,41 @@ use Psr\Log\LogLevel;
 final class StorageSourcesTest extends TestCase
 {
     #[Test]
+    public function escapesTheSizesItIsPassed(): void
+    {
+        static::assertStringContainsString(
+            'sizes="100vw&quot;&gt;"',
+            $this->helper()('/a/photo.jpg', profile: 'tile', sizes: '100vw">'),
+        );
+    }
+
+    #[Test]
+    public function givesEverySourceTheSizesItIsPassedInPlaceOfTheProfiles(): void
+    {
+        static::assertSame(
+            '<source type="image/avif" srcset="/a/_variant/tile-320/photo.avif 320w" sizes="(min-width: 900px) 46vw, 92vw">'
+                . '<source type="image/webp" srcset="/a/_variant/tile-320/photo.webp 320w" sizes="(min-width: 900px) 46vw, 92vw">',
+            $this->helper()('/a/photo.jpg', profile: 'tile', sizes: '(min-width: 900px) 46vw, 92vw'),
+        );
+    }
+
+    #[Test]
     public function lazyModeEmitsDataLazysrcSrcset(): void
     {
         static::assertSame(
             '<source type="image/avif" data-lazysrc-srcset="/a/_variant/tile-320/photo.avif 320w" sizes="100vw">'
                 . '<source type="image/webp" data-lazysrc-srcset="/a/_variant/tile-320/photo.webp 320w" sizes="100vw">',
             $this->helper()('/a/photo.jpg', profile: 'tile', lazy: true),
+        );
+    }
+
+    #[Test]
+    public function leavesSizesOutWhenPassedNone(): void
+    {
+        static::assertSame(
+            '<source type="image/avif" srcset="/a/_variant/tile-320/photo.avif 320w">'
+                . '<source type="image/webp" srcset="/a/_variant/tile-320/photo.webp 320w">',
+            $this->helper()('/a/photo.jpg', profile: 'tile', sizes: ''),
         );
     }
 

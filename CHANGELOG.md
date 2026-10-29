@@ -4,6 +4,20 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `storageSources()` takes an optional `$sizes`, given to every `<source>` in
+  place of the profile's, for a template whose `<img>` sits in a different slot
+  than the profile assumes (half a gallery row, say). The browser reads a
+  `<source>`'s own `sizes`, so without it the avif/webp sources were fetched for
+  the profile's width. An empty string leaves the attribute out.
+
+### Changed
+
+- `storageSources()` escapes its `sizes` value.
+
 ## [2.1.0] - 2026-10-23
 
 ### Added

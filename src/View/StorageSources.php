@@ -10,7 +10,11 @@ use Contenir\Asset\Mezzio\Service\ProfileProviderService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
+use function htmlspecialchars;
 use function sprintf;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
 
 /**
  * `<source>` elements for a `<picture>`, one per extra output format declared
@@ -28,8 +32,14 @@ use function sprintf;
  * defers the <img>; without it a live <source srcset> would fetch eagerly and
  * defeat lazy loading.
  *
+ * Pass $sizes to give these sources the `sizes` the template gives its <img>
+ * where the image's slot differs from the profile's usual one (half a gallery
+ * row, say); the browser reads a <source>'s own sizes, so leaving the profile's
+ * there would have it fetch for the wrong width. An empty $sizes leaves the
+ * attribute out.
+ *
  * Returns raw markup — asset paths are percent-encoded and the sizes value is
- * config. An unknown profile renders '' and logs a warning. An animated source
+ * escaped. An unknown profile renders '' and logs a warning. An animated source
  * renders '' too: resizing would keep one frame, so it is served as itself.
  *
  * A plain invokable service: call it from any template engine.
@@ -46,9 +56,11 @@ final readonly class StorageSources
     ) {}
 
     /**
+     * @param string|null $sizes The `sizes` for each source in place of the profile's
+     *
      * @mago-expect lint:no-boolean-flag-parameter Published template API: `$lazy` switches the srcset attribute name.
      */
-    public function __invoke(?string $path, string $profile, bool $lazy = false): string
+    public function __invoke(?string $path, string $profile, bool $lazy = false, ?string $sizes = null): string
     {
         if (null === $path || '' === $path) {
             return '';
@@ -65,7 +77,8 @@ final readonly class StorageSources
         }
 
         $srcsetAttr = $lazy ? 'data-lazysrc-srcset' : 'srcset';
-        $sizesAttr  = '' === $definition->sizes ? '' : sprintf(' sizes="%s"', $definition->sizes);
+        $sizes      ??= $definition->sizes;
+        $sizesAttr  = '' === $sizes ? '' : sprintf(' sizes="%s"', htmlspecialchars($sizes, ENT_QUOTES | ENT_HTML5));
 
         $output = '';
         foreach ($definition->formats as $format) {
