@@ -74,6 +74,18 @@ final class VariantGeneratorTest extends TestCase
     }
 
     #[Test]
+    public function answersWithAVectorSourceItselfAndResizesNothing(): void
+    {
+        $this->writeFile('asset/foo/logo.svg', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"/>');
+        $resizer = new StubImageResizer();
+
+        $path = $this->generator($resizer)->generate('foo', 't-80', 'logo.svg');
+
+        static::assertSame($this->path('asset/foo/logo.svg'), $path);
+        static::assertSame([], $resizer->calls);
+    }
+
+    #[Test]
     public function answersWithAnUppercaseVectorSourceItself(): void
     {
         $this->writeFile('asset/foo/logo.SVG', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"/>');
