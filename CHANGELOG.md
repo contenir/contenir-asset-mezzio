@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- A variant of an SVG is the SVG itself, as an animation's is: the variant route resized it
+  with ImageMagick, which wrote a broken SVG, so the CMS's previews of vectors showed blank.
+
 ## [2.3.0] - 2026-10-30
 
 ### Added
