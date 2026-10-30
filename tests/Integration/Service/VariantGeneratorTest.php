@@ -74,6 +74,31 @@ final class VariantGeneratorTest extends TestCase
     }
 
     #[Test]
+    public function answersWithAnUppercaseVectorSourceItself(): void
+    {
+        if (is_file($this->writePng('asset/foo/probe.png', 1, 1)) && is_file($this->path('asset/foo/probe.PNG'))) {
+            self::markTestSkipped('The filesystem is case-insensitive, so extension case cannot be observed.');
+        }
+        $this->writeFile('asset/foo/logo.SVG', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"/>');
+
+        $path = $this->generator(new StubImageResizer())->generate('foo', 't-80', 'logo.svg');
+
+        static::assertSame($this->path('asset/foo/logo.SVG'), $path);
+    }
+
+    #[Test]
+    public function answersWithAVectorSourceItselfAndResizesNothing(): void
+    {
+        $this->writeFile('asset/foo/logo.svg', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"/>');
+        $resizer = new StubImageResizer();
+
+        $path = $this->generator($resizer)->generate('foo', 't-80', 'logo.svg');
+
+        static::assertSame($this->path('asset/foo/logo.svg'), $path);
+        static::assertSame([], $resizer->calls);
+    }
+
+    #[Test]
     public function fallsBackToALowercasedSourceExtension(): void
     {
         $this->writePng('asset/foo/pic.PNG', 10, 10);
