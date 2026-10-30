@@ -4,6 +4,14 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `siteAssets()`: the site's own stylesheets, scripts, font preloads, icons, theme colour, inline CSS and "js" class,
+  from a `site_assets` config block, as markup for `<head>` (`head($theme, $nonce)`) and the end of `<body>`
+  (`bodyEnd($nonce)`), with a version in the stylesheets' and scripts' paths.
+
 ## [2.2.0] - 2026-10-29
 
 ### Added

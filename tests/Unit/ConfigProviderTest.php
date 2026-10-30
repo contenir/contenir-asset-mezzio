@@ -24,10 +24,12 @@ use Contenir\Asset\Mezzio\Service\Factory\VariantGeneratorFactory;
 use Contenir\Asset\Mezzio\Service\OnDemandVariantResolver;
 use Contenir\Asset\Mezzio\Service\ProfileProviderService;
 use Contenir\Asset\Mezzio\Service\VariantGenerator;
+use Contenir\Asset\Mezzio\View\Factory\SiteAssetsFactory;
 use Contenir\Asset\Mezzio\View\Factory\StorageSizesFactory;
 use Contenir\Asset\Mezzio\View\Factory\StorageSourcesFactory;
 use Contenir\Asset\Mezzio\View\Factory\StorageSrcSetFactory;
 use Contenir\Asset\Mezzio\View\Factory\StorageUrlFactory;
+use Contenir\Asset\Mezzio\View\SiteAssets;
 use Contenir\Asset\Mezzio\View\StorageSizes;
 use Contenir\Asset\Mezzio\View\StorageSources;
 use Contenir\Asset\Mezzio\View\StorageSrcSet;
@@ -77,6 +79,7 @@ final class ConfigProviderTest extends TestCase
                     StorageSources::class              => StorageSourcesFactory::class,
                     StorageSrcSet::class               => StorageSrcSetFactory::class,
                     StorageUrl::class                  => StorageUrlFactory::class,
+                    SiteAssets::class                  => SiteAssetsFactory::class,
                 ],
             ],
             (new ConfigProvider())->getDependencies(),
@@ -106,12 +109,15 @@ final class ConfigProviderTest extends TestCase
                     'StorageSrcSet'  => StorageSrcSet::class,
                     'storageUrl'     => StorageUrl::class,
                     'StorageUrl'     => StorageUrl::class,
+                    'siteAssets'     => SiteAssets::class,
+                    'SiteAssets'     => SiteAssets::class,
                 ],
                 'factories' => [
                     StorageSizes::class   => StorageSizesFactory::class,
                     StorageSources::class => StorageSourcesFactory::class,
                     StorageSrcSet::class  => StorageSrcSetFactory::class,
                     StorageUrl::class     => StorageUrlFactory::class,
+                    SiteAssets::class     => SiteAssetsFactory::class,
                 ],
             ],
             (new ConfigProvider())->getViewHelperConfig(),

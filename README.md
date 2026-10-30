@@ -139,6 +139,44 @@ $app->get('/asset/{folder:.+}/.{dimensions}/{filename}', ImageResizeHandler::cla
 With Twig, Plates or another engine, fetch the services from the container and
 register them as functions. See [docs/template-services.md](docs/template-services.md).
 
+## The site's own assets
+
+`siteAssets()` writes the site's own stylesheets, scripts, fonts and icons, from a `site_assets` config block, as
+markup for any template engine:
+
+```php
+'site_assets' => [
+    'path'          => '/asset',
+    'version'       => '1.1.9',                            // /asset/css/1.1.9/app.css; leave out for /asset/css/app.css
+    'stylesheets'   => ['css/app.css'],
+    'scripts'       => ['js/app.js'],                      // preloaded in <head>, written at the end of <body>
+    'attributes'    => ['data-router-track' => 'reload'],  // on each stylesheet and script
+    'preload_fonts' => ['font/regular.woff2'],             // at the address the stylesheet asks for, unversioned
+    'inline_css'    => ['css/inline.css'],                 // read from public_directory (public/) into a <style>
+    'icons'         => [
+        ['rel' => 'apple-touch-icon', 'sizes' => '180x180', 'href' => '/apple-touch-icon{theme}.png'],
+        ['rel' => 'icon', 'type' => 'image/png', 'sizes' => '32x32', 'href' => '/favicon-32x32{theme}.png'],
+        ['rel' => 'manifest', 'href' => '/site.webmanifest'],
+    ],
+    'theme_colors'  => ['default' => '#FAF8F5', 'copper' => '#B87333'],
+    'js_class'      => true,                               // a "js" class on <html> before the page renders
+],
+```
+
+```php
+<head>
+    <?= $this->siteAssets()->head($theme, $nonce) ?>
+</head>
+<body>
+    ...
+    <?= $this->siteAssets()->bodyEnd($nonce) ?>
+</body>
+```
+
+A page's theme picks its icons, with `{theme}` in their address as `-copper` (none for the default theme), and its
+`theme-color`. The versioned paths are for the web server to map back to the files, so a new version is fetched
+afresh.
+
 ## Handlers and services
 
 | Class | Role |

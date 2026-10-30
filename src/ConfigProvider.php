@@ -61,6 +61,7 @@ final readonly class ConfigProvider
                 View\StorageSources::class                 => View\Factory\StorageSourcesFactory::class,
                 View\StorageSrcSet::class                  => View\Factory\StorageSrcSetFactory::class,
                 View\StorageUrl::class                     => View\Factory\StorageUrlFactory::class,
+                View\SiteAssets::class                     => View\Factory\SiteAssetsFactory::class,
             ],
         ];
     }
@@ -84,12 +85,15 @@ final readonly class ConfigProvider
                 'StorageSrcSet'  => View\StorageSrcSet::class,
                 'storageUrl'     => View\StorageUrl::class,
                 'StorageUrl'     => View\StorageUrl::class,
+                'siteAssets'     => View\SiteAssets::class,
+                'SiteAssets'     => View\SiteAssets::class,
             ],
             'factories' => [
                 View\StorageSizes::class   => View\Factory\StorageSizesFactory::class,
                 View\StorageSources::class => View\Factory\StorageSourcesFactory::class,
                 View\StorageSrcSet::class  => View\Factory\StorageSrcSetFactory::class,
                 View\StorageUrl::class     => View\Factory\StorageUrlFactory::class,
+                View\SiteAssets::class     => View\Factory\SiteAssetsFactory::class,
             ],
         ];
     }
