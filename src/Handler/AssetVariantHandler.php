@@ -18,6 +18,7 @@ use function pathinfo;
 use function preg_match;
 use function rawurldecode;
 use function sprintf;
+use function strtolower;
 
 use const PATHINFO_EXTENSION;
 
@@ -52,6 +53,7 @@ final class AssetVariantHandler implements RequestHandlerInterface
         'jpeg' => 'image/jpeg',
         'jpg'  => 'image/jpeg',
         'png'  => 'image/png',
+        'svg'  => 'image/svg+xml',
         'webp' => 'image/webp',
     ];
 
@@ -64,12 +66,12 @@ final class AssetVariantHandler implements RequestHandlerInterface
     ) {}
 
     /**
-     * The generator always writes a lower-case extension, so the map needs no
-     * case folding.
+     * By extension, folded to lower case: the generator writes a lower-case one, but an animated or
+     * vector source is served under its own.
      */
     private static function mediaType(string $path): string
     {
-        return self::MEDIA_TYPES[pathinfo($path, PATHINFO_EXTENSION)] ?? self::FALLBACK_MEDIA_TYPE;
+        return self::MEDIA_TYPES[strtolower(pathinfo($path, PATHINFO_EXTENSION))] ?? self::FALLBACK_MEDIA_TYPE;
     }
 
     /**
