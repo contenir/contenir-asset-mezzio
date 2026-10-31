@@ -163,6 +163,16 @@ final class AssetVariantHandlerTest extends TestCase
     }
 
     #[Test]
+    public function namesAnUppercaseVectorsTypeAsAnSvg(): void
+    {
+        $this->writeFile('asset/foo/logo.SVG', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"/>');
+
+        $response = $this->handle('/asset/foo/_variant/thumb/logo.SVG');
+
+        static::assertSame('image/svg+xml', $response->getHeaderLine('Content-Type'));
+    }
+
+    #[Test]
     #[DataProvider('mediaTypeProvider')]
     public function namesTheMediaTypeOfTheServedFormat(string $extension, string $mediaType): void
     {
@@ -187,6 +197,26 @@ final class AssetVariantHandlerTest extends TestCase
 
         static::assertSame(
             [200, 'image/gif', GifFactory::bytes(2)],
+            [$response->getStatusCode(), $response->getHeaderLine('Content-Type'), (string) $response->getBody()],
+        );
+        static::assertSame([], $resizer->calls);
+    }
+
+    /**
+     * A vector is served as itself, under its own type: with nosniff, the CMS's previews draw
+     * nothing under any other.
+     */
+    #[Test]
+    public function servesAVectorSourceItselfAsAnSvg(): void
+    {
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"/>';
+        $this->writeFile('asset/foo/logo.svg', $svg);
+        $resizer = new StubImageResizer();
+
+        $response = $this->handle('/asset/foo/_variant/thumb/logo.svg', $resizer);
+
+        static::assertSame(
+            [200, 'image/svg+xml', $svg],
             [$response->getStatusCode(), $response->getHeaderLine('Content-Type'), (string) $response->getBody()],
         );
         static::assertSame([], $resizer->calls);
