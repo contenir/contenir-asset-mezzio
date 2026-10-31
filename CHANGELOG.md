@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- A vector variant is served as `image/svg+xml`. 2.3.1 served the SVG itself as
+  `application/octet-stream`, which with `nosniff` the CMS's previews would not draw.
+
 ## [2.3.1] - 2026-10-31
 
 ### Fixed
